@@ -1,6 +1,6 @@
 import { users } from "../db.js";
 
-export async function singUp(req, res) {
+export async function signUp(req, res) {
     const { username, avatar } = req.body;
 
     if (!username || !avatar) {
