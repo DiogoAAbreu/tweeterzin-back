@@ -4,7 +4,7 @@ export async function signUp(req, res) {
     const { username, avatar } = req.body;
 
     if (!username || !avatar) {
-        return res.status(400).send({ error: 'Preencha todos os campos.' });
+        return res.status(400).send({ error: 'Todos os campos são obrigatórios!' });
     }
     try {
         const userExists = users.find(user => user.username === username);

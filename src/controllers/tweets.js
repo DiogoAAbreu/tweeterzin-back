@@ -5,7 +5,7 @@ export async function postTweet(req, res) {
     const { username, tweet } = req.body;
 
     if (!username || !tweet) {
-        return res.status(400).send({ error: 'Campo vazio.' })
+        return res.status(400).send({ error: 'Todos os campos são obrigatórios!' })
     }
 
     try {
@@ -37,5 +37,17 @@ export async function getTweets(req, res) {
         res.status(200).send(lastTweets)
     } catch (err) {
         return res.status(500).send({ error: 'Impossível mostrar Tweets.' })
+    }
+}
+
+export async function getTweetsByUser(req, res) {
+    const { username } = req.params;
+
+    try {
+        const userTweets = tweets.filter(tweet => tweet.username === username);
+
+        return res.status(200).send(userTweets);
+    } catch (error) {
+        return res.status(500).send({ error: 'Impossível exibir tweets.' });
     }
 }
