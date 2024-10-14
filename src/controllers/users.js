@@ -7,6 +7,12 @@ export async function signUp(req, res) {
         return res.status(400).send({ error: 'Preencha todos os campos.' });
     }
     try {
+        const userExists = users.find(user => user.username === username);
+
+        if (userExists) {
+            return res.status(400).send({ error: 'Este usuario já existe.' })
+        }
+
         users.push({
             username,
             avatar
