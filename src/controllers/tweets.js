@@ -1,18 +1,18 @@
-import { tweets, users } from "../db.js";
+import { tweets } from "../db.js";
 import { pagenateTweets } from "../utils/utils.js";
 
 
 export async function postTweet(req, res) {
-    const { username, tweet } = req.body;
+    const { tweet } = req.body;
+    const { user } = req.headers;
 
-    if (!username || !tweet) {
+    if (!user || !tweet) {
         return res.status(400).send({ error: 'Todos os campos são obrigatórios!' })
     }
-    //126244187650208
 
     try {
         tweets.push({
-            username,
+            username: user,
             tweet
         })
 
@@ -24,10 +24,10 @@ export async function postTweet(req, res) {
 
 export async function getTweets(req, res) {
     const { page } = req.query;
-    const pageNumber = Number(page);
+
     try {
         if (page) {
-            console.log('oi')
+            const pageNumber = Number(page);
             if (isNaN(pageNumber) || pageNumber < 1) {
                 res.status(400).send({ error: 'Informe uma página válida!' })
             }
@@ -37,17 +37,7 @@ export async function getTweets(req, res) {
             return res.status(200).send(pageTweets)
         }
 
-        const lastTweets = tweets.slice(-10).map(tweetMade => {
-            const { username, tweet } = tweetMade;
-
-            const { avatar } = users.find(user => user.username === username)
-
-            return {
-                username,
-                avatar,
-                tweet
-            }
-        });
+        const lastTweets = await pagenateTweets(tweets, 10, 1);
 
         res.status(200).send(lastTweets)
     } catch (err) {
