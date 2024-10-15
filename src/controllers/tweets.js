@@ -1,5 +1,5 @@
 import { tweets } from "../db.js";
-import { pagenateTweets } from "../utils/utils.js";
+import { insertAvatar, pagenateTweets } from "../utils/utils.js";
 
 
 export async function postTweet(req, res) {
@@ -49,7 +49,7 @@ export async function getTweetsByUser(req, res) {
     const { username } = req.params;
 
     try {
-        const userTweets = tweets.filter(tweet => tweet.username === username);
+        const userTweets = tweets.filter(tweet => tweet.username === username).map(tweet => insertAvatar(tweet));
 
         return res.status(200).send(userTweets);
     } catch (error) {
