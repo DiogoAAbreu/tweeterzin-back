@@ -15,5 +15,5 @@ export function insertAvatar(tweetMade) {
         username,
         avatar,
         tweet
-    }
+    };
 }
